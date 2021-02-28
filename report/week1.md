@@ -500,4 +500,35 @@ $action = Route::currentRouteAction(); // string
 ~~~
 
 ## Cross-Origin Resource Sharing (CORS)
+Laravel có thể tự động trả về CORS OPTIONS HTTP requests với các giá trị được config. Tất cả các cài đặt CORS có thể được config trong configuration file `config/cors.php`, `OPTIONS` request sẽ được tự động handle bởi `HandleCors` middleware. globle middleware này có thể tìm thấy trong HTTP kernel (`App\Http\Kernel`)
+ex:
+~~~
+// config/cors.php
+ public function handle($request, Closure $next)
+ {
+        return $next($request)
+            ->header('Access-Control-Allow-Origin', 'http://abc.example.com')
+            ->header('Access-Control-Allow-Methods', '*')
+            ->header('Access-Control-Allow-Credentials', 'true')
+            ->header('Access-Control-Allow-Headers', 'X-CSRF-Token');
+ }
+
+
+//kernel
+ protected $routeMiddleware = [
+    ...
+    \App\Http\Middleware\Cors::class,
+    ...
+];
+
+web.php
+'middleware' => ['cors'] 
+~~~
+
+## Route Caching
+Khi deploying application lên production, ta nên tận dụng route cache của laravel để tăng hiệu năng và giảm thời gian register tất cả các route của app. ta có thể tạo ra 1 route cache bằng cách chạy:
+`php artisan route:cache`
+Sau khi chúng ta chạy lệnh, tất cả các route sẽ được lưu vào bộ nhớ cache. Vì vậy, khi người dùng yêu cầu những route nhất định, những route sẽ được tải từ bộ nhớ cache. tuy nhiên, nếu có những route mới được thêm vào thì người dùng sẽ không truy cập được. Chúng ta cũng có thể xóa cache bằng cách chạy lệnh sau:
+`php artisan route:clear`
+
 
