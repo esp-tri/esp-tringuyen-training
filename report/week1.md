@@ -413,7 +413,6 @@ protected function configureRateLimiting()
 
 -> có thể gọi config này thông qua middleware của route
 ex: Route::get('/login')->middleware(['throttle:global']);
-Điều này cho phép tối đa 50 request đăng nhập trong 1 phút
 ~~~
 Nếu những yêu cầu đến vượt quá giới hạn quy định thì 1 response 429 sẽ được return.
 Nếu muốn custom response ta có thể sử dụng `response` method:
